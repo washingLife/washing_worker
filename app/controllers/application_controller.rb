@@ -7,10 +7,27 @@ class ApplicationController < ActionController::Base
       workers_path
     elsif current_worker.has_role?(:yunying)
       categories_path
+    elsif current_worker.has_role?(:fenchengshi)
+      stations_path
     end
+  end
+
+  def after_sign_out_path_for(resource)
+    new_worker_session_path
   end
 
   def current_ability
     @current_ability ||= ::Ability.new(current_worker)
+  end
+
+  def current_city
+    unless session[:current_city_id]
+      session[:current_city_id] = current_worker.cities.first.id if current_worker.cities.first
+    end
+    if session[:current_city_id]
+      @current_city ||= City.find(session[:current_city_id])
+    else
+      @current_city = nil
+    end
   end
 end

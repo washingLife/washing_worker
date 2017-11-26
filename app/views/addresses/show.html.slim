@@ -1,0 +1,24 @@
+p#notice = notice
+
+p
+  strong Address:
+  = @address.address
+p
+  strong Lat:
+  = @address.lat
+p
+  strong Lng:
+  = @address.lng
+p
+  strong Comment:
+  = @address.comment
+p
+  strong Addressable type:
+  = @address.addressable_type
+p
+  strong Addressable:
+  = @address.addressable_id
+
+=> link_to 'Edit', edit_address_path(@address)
+'|
+=< link_to 'Back', addresses_path
