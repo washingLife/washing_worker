@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171113105131) do
+ActiveRecord::Schema.define(version: 20171126075210) do
 
   create_table "addresses", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "address"
@@ -30,6 +30,13 @@ ActiveRecord::Schema.define(version: 20171113105131) do
     t.boolean "is_del", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "categories_cities", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.bigint "city_id"
+    t.bigint "category_id"
+    t.index ["category_id"], name: "index_categories_cities_on_category_id"
+    t.index ["city_id"], name: "index_categories_cities_on_city_id"
   end
 
   create_table "cities", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
@@ -76,6 +83,30 @@ ActiveRecord::Schema.define(version: 20171113105131) do
     t.index ["station_id"], name: "index_couriers_stations_on_station_id"
   end
 
+  create_table "price_rules", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.integer "grade"
+    t.bigint "city_id"
+    t.bigint "category_id"
+    t.date "from_date"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["category_id"], name: "index_price_rules_on_category_id"
+    t.index ["city_id"], name: "index_price_rules_on_city_id"
+  end
+
+  create_table "prices", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.float "price1", limit: 24, default: 0.0
+    t.float "price2", limit: 24, default: 0.0
+    t.float "price3", limit: 24, default: 0.0
+    t.float "price4", limit: 24, default: 0.0
+    t.float "price5", limit: 24, default: 0.0
+    t.float "price6", limit: 24, default: 0.0
+    t.bigint "product_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["product_id"], name: "index_prices_on_product_id"
+  end
+
   create_table "products", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "name"
     t.string "logo"
@@ -108,6 +139,35 @@ ActiveRecord::Schema.define(version: 20171113105131) do
     t.index ["city_id"], name: "index_stations_on_city_id"
   end
 
+  create_table "user_addresses", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.bigint "user_id"
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "city_id"
+    t.index ["city_id"], name: "index_user_addresses_on_city_id"
+    t.index ["user_id"], name: "index_user_addresses_on_user_id"
+  end
+
+  create_table "users", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.string "email", default: "", null: false
+    t.string "encrypted_password", default: "", null: false
+    t.string "reset_password_token"
+    t.datetime "reset_password_sent_at"
+    t.datetime "remember_created_at"
+    t.integer "sign_in_count", default: 0, null: false
+    t.datetime "current_sign_in_at"
+    t.datetime "last_sign_in_at"
+    t.string "current_sign_in_ip"
+    t.string "last_sign_in_ip"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "cel"
+    t.index ["cel"], name: "index_users_on_cel", unique: true
+    t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
+  end
+
   create_table "workers", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -133,5 +193,11 @@ ActiveRecord::Schema.define(version: 20171113105131) do
     t.index ["worker_id"], name: "index_workers_roles_on_worker_id"
   end
 
+  add_foreign_key "categories_cities", "categories"
+  add_foreign_key "categories_cities", "cities"
+  add_foreign_key "price_rules", "categories"
+  add_foreign_key "price_rules", "cities"
+  add_foreign_key "prices", "products"
   add_foreign_key "products", "categories"
+  add_foreign_key "user_addresses", "users"
 end

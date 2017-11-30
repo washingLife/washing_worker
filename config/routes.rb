@@ -13,7 +13,15 @@ Rails.application.routes.draw do
 
   resources :categories do 
     resources :products
+     member do
+      get :prices
+      post :init_prices
+    end
   end
+
+  resources :prices
+
+  resources :price_rules
 
   resources :stations do
   end
