@@ -63,7 +63,7 @@ class WorkersController < ApplicationController
 
   def change_current_city
     session[:current_city_id] = params[:city_id]
-    redirect_to :back
+    redirect_back fallback_location: root_path
   end
 
   private
@@ -77,6 +77,6 @@ class WorkersController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def worker_params
-      params.require(:worker).permit(:email, :password, :password_confirmation, role_ids: [])
+      params.require(:worker).permit(:email, :password, :password_confirmation, role_ids: [], city_ids: [])
     end
 end

@@ -1,4 +1,4 @@
-source 'https://rubygems.org'
+source 'http://gems.ruby-china.org/'
 
 git_source(:github) do |repo_name|
   repo_name = "#{repo_name}/#{repo_name}" unless repo_name.include?("/")
@@ -48,15 +48,20 @@ gem 'cancancan', '~> 2.0'
 gem 'config'
 gem 'qiniu', '~> 6.8.1'
 
+gem "select2-rails"
+gem 'rest-client'
+gem 'bootstrap-editable-rails'
+
+gem 'simple_form_bootstrap_datepicker'
+gem 'jquery-ui-rails'
+
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
   # Adds support for Capybara system testing and selenium driver
   gem 'capybara', '~> 2.13'
   gem 'selenium-webdriver'
-
   gem 'database_cleaner', '< 1.1.0'
-  gem 'awesome_print'
 end
 
 group :development do
