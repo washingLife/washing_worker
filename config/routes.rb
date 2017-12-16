@@ -36,10 +36,17 @@ Rails.application.routes.draw do
 
   resources :couriers
 
+  resources :orders do 
+  end
+
+  resources :users do 
+  end
+
   post '/categories/:id', :to => 'categories#recovery'
   post '/categories/:category_id/products/:id', :to => 'products#recovery'
 
   mount ActionCable.server => '/cable'
 
   root to: 'stations#index'
+  root to: 'workers#signin'
 end

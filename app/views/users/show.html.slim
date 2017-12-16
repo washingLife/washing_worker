@@ -1,0 +1,33 @@
+.row
+  .col-md-12
+    .panel.panel-default
+      .panel-heading#operations
+        | 基本信息
+      .panel-body
+        table.table.table-striped
+          tr
+            td width='15%' 邮箱
+            td width='35%' = @user.email
+
+.row
+  .col-md-12
+    .panel.panel-default
+      .panel-heading
+        | 订单
+      .panel-body
+        table.table.table-striped
+          thead
+            tr
+              th Category
+              th Total price
+              th Courier status
+              th
+
+          tbody
+            - @orders.each do |order|
+              tr
+                td = order.category.name
+                td = order.total_price
+                td = show_order_courier_status order.courier_status
+                td = link_to 'Show', order
+        = will_paginate @orders, renderer: BootstrapPagination::Rails, param_name: :order_page

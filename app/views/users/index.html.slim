@@ -1,0 +1,15 @@
+h1 Listing users
+
+table.table.table-striped
+  thead
+    tr
+      th 登录账号
+      th
+
+  tbody
+    - @users.each do |user|
+      tr
+        td = user.email
+        td = link_to 'Show', user
+
+= will_paginate @users, renderer: BootstrapPagination::Rails

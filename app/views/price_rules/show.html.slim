@@ -6,15 +6,15 @@
       .panel-body
         table.table.table-striped
           tr
-            td width='15%' City
-            td width='35%' = @price_rule.city.name
-            td width='15%' Category
-            td width='35%' = @price_rule.category.name
+            td width='25%' City
+            td width='25%' Grade
+            td width='25%' Category
+            td width='25%' From date
           tr
-            td width='15%' Grade
-            td width='35%' = show_grade(@price_rule.grade)
-            td width='15%' From date
-            td width='35%' = @price_rule.from_date
+            td width='25%' = @price_rule.city.name
+            td width='25%' = show_grade(@price_rule.grade)
+            td width='25%' = @price_rule.category.name
+            td width='25%' = @price_rule.from_date
 
 .row
   .col-md-12

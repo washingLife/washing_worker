@@ -17,4 +17,10 @@ module ApplicationHelper
       @current_city = nil
     end
   end
+  
+  def date_time time
+    if time
+      Time.at(time).strftime("%Y-%m-%d %H:%M:%S")
+    end
+  end  
 end

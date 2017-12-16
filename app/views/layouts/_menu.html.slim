@@ -21,7 +21,10 @@
                   = link_to "城市", cities_path
               - if can?(:manage, Price)
                 li class="#{is_active?('prices', params[:controller])}"
-                  = link_to "价格管理", prices_path    
+                  = link_to "价格管理", prices_path   
+              - if can?(:manage, User)
+                li class="#{is_active?('users', params[:controller])}"
+                  = link_to "用户", users_path
           
           li.dropdown
             = link_to "分城市管理 <b class='caret'></b>".html_safe, '#', :class => 'dropdown-toggle', data: {toggle: 'dropdown'}
@@ -35,7 +38,9 @@
               - if can?(:manage, PriceRule)
                 li class="#{is_active?('price_rules', params[:controller])}"
                   = link_to "价格管理", price_rules_path
-
+              - if can?(:manage, Order)
+                li class="#{is_active?('orders', params[:controller])}"
+                  = link_to "订单", orders_path
           li.dropdown
             = link_to "系统管理 <b class='caret'></b>".html_safe, '#', :class => 'dropdown-toggle', data: {toggle: 'dropdown'}
             ul.dropdown-menu
