@@ -4,7 +4,8 @@ class UsersController < ApplicationController
   before_action :set_user, only: [:show]
 
   def index
-    @users = User.paginate(page: params[:page], per_page: 10).order(updated_at: :desc)
+    @q = User.ransack(params[:q])  
+    @users = @q.result(distinct: true).paginate(page: params[:page], per_page: 10).order(updated_at: :desc)
   end
 
   def show

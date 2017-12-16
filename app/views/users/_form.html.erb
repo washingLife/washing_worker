@@ -1,0 +1,6 @@
+<%= form_tag users_path, method: :get, class: "navbar-form navbar-left" do %>  
+  <div class="form-group">  
+    <%= search_field_tag("q[email_cont]", params["q"] && params["q"]["email_cont"],  
+                       class:"form-control input-sm search-form", placeholder: "输入用户名")%>  
+  </div>  
+<% end %>  
