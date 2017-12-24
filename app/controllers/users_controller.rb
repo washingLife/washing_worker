@@ -10,6 +10,8 @@ class UsersController < ApplicationController
 
   def show
     @orders = @user.orders.paginate(page: params[:order_page], per_page: 10).order(id: :desc)
+    @user_card_logs = @user.user_card.user_card_logs.paginate(page: params[:user_card_log_page], per_page: 10).order(id: :desc)
+    @coupons = @user.coupons.paginate(page: params[:coupon_page], per_page: 10).order(id: :desc)
   end
 
   private

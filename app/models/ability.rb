@@ -14,6 +14,10 @@ class Ability
       can :manage, City
       can :manage, Price
       can :manage, User
+      can :manage, UserCardChargeSetting
+      can :manage, CouponList
+      can :manage, OrderPromotion
+      can :manage, Coupon
     end
 
     if worker.has_role?(:fenchengshi)

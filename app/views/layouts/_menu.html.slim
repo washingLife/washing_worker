@@ -25,6 +25,12 @@
               - if can?(:manage, User)
                 li class="#{is_active?('users', params[:controller])}"
                   = link_to "用户", users_path
+              - if can?(:manage, UserCardChargeSetting)
+                li class="#{is_active?('user_card_charge_settings', params[:controller])}"
+                  = link_to "充值优惠", user_card_charge_settings_path
+              - if can?(:manage, CouponList)
+                li class="#{is_active?('coupon_lists', params[:controller])}"
+                  = link_to "优惠券管理", coupon_lists_path
           
           li.dropdown
             = link_to "分城市管理 <b class='caret'></b>".html_safe, '#', :class => 'dropdown-toggle', data: {toggle: 'dropdown'}

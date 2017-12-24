@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171126075210) do
+ActiveRecord::Schema.define(version: 20171217153808) do
 
   create_table "addresses", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "address"
@@ -55,6 +55,29 @@ ActiveRecord::Schema.define(version: 20171126075210) do
     t.index ["worker_id"], name: "index_cities_workers_on_worker_id"
   end
 
+  create_table "coupon_lists", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.string "name"
+    t.integer "validity_type"
+    t.date "valid_from"
+    t.date "valid_to"
+    t.integer "fixed_begin_term"
+    t.integer "fixed_term"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "coupons", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.bigint "coupon_list_id"
+    t.bigint "user_id"
+    t.date "valid_from"
+    t.date "valid_to"
+    t.datetime "used_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["coupon_list_id"], name: "index_coupons_on_coupon_list_id"
+    t.index ["user_id"], name: "index_coupons_on_user_id"
+  end
+
   create_table "couriers", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -81,6 +104,43 @@ ActiveRecord::Schema.define(version: 20171126075210) do
     t.datetime "updated_at", null: false
     t.index ["courier_id"], name: "index_couriers_stations_on_courier_id"
     t.index ["station_id"], name: "index_couriers_stations_on_station_id"
+  end
+
+  create_table "items", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.integer "amount"
+    t.float "price", limit: 24
+    t.bigint "product_id"
+    t.bigint "order_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["order_id"], name: "index_items_on_order_id"
+    t.index ["product_id"], name: "index_items_on_product_id"
+  end
+
+  create_table "order_promotions", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.integer "kind"
+    t.float "discount", limit: 24
+    t.float "premise", limit: 24
+    t.bigint "coupon_list_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["coupon_list_id"], name: "index_order_promotions_on_coupon_list_id"
+  end
+
+  create_table "orders", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.bigint "category_id"
+    t.bigint "user_id"
+    t.bigint "user_address_id"
+    t.float "total_price", limit: 24
+    t.string "courier_status"
+    t.integer "voucher_status"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "city_id"
+    t.index ["category_id"], name: "index_orders_on_category_id"
+    t.index ["city_id"], name: "index_orders_on_city_id"
+    t.index ["user_address_id"], name: "index_orders_on_user_address_id"
+    t.index ["user_id"], name: "index_orders_on_user_id"
   end
 
   create_table "price_rules", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
@@ -149,6 +209,35 @@ ActiveRecord::Schema.define(version: 20171126075210) do
     t.index ["user_id"], name: "index_user_addresses_on_user_id"
   end
 
+  create_table "user_card_charge_settings", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.float "min", limit: 24, default: 0.0
+    t.float "money_give", limit: 24, default: 0.0
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "user_card_logs", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.integer "kind", default: 0
+    t.float "real_money", limit: 24, default: 0.0
+    t.float "fake_money", limit: 24, default: 0.0
+    t.string "loggable_type"
+    t.bigint "loggable_id"
+    t.bigint "user_card_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["loggable_type", "loggable_id"], name: "index_user_card_logs_on_loggable_type_and_loggable_id"
+    t.index ["user_card_id"], name: "index_user_card_logs_on_user_card_id"
+  end
+
+  create_table "user_cards", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.float "real_money", limit: 24, default: 0.0
+    t.float "fake_money", limit: 24, default: 0.0
+    t.bigint "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_user_cards_on_user_id"
+  end
+
   create_table "users", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -166,6 +255,36 @@ ActiveRecord::Schema.define(version: 20171126075210) do
     t.index ["cel"], name: "index_users_on_cel", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
+  end
+
+  create_table "vouchers", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.bigint "order_id"
+    t.integer "status", default: 0
+    t.datetime "payed_at"
+    t.float "money", limit: 24
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["order_id"], name: "index_vouchers_on_order_id"
+  end
+
+  create_table "waybills", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.bigint "order_id"
+    t.string "status"
+    t.string "sender_type"
+    t.bigint "sender_id"
+    t.bigint "from_address_id"
+    t.string "receiver_type"
+    t.bigint "receiver_id"
+    t.bigint "to_address_id"
+    t.datetime "exp_time"
+    t.datetime "actual_time"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["from_address_id"], name: "index_waybills_on_from_address_id"
+    t.index ["order_id"], name: "index_waybills_on_order_id"
+    t.index ["receiver_type", "receiver_id"], name: "index_waybills_on_receiver_type_and_receiver_id"
+    t.index ["sender_type", "sender_id"], name: "index_waybills_on_sender_type_and_sender_id"
+    t.index ["to_address_id"], name: "index_waybills_on_to_address_id"
   end
 
   create_table "workers", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
@@ -195,9 +314,18 @@ ActiveRecord::Schema.define(version: 20171126075210) do
 
   add_foreign_key "categories_cities", "categories"
   add_foreign_key "categories_cities", "cities"
+  add_foreign_key "coupons", "coupon_lists"
+  add_foreign_key "coupons", "users"
+  add_foreign_key "items", "orders"
+  add_foreign_key "items", "products"
+  add_foreign_key "orders", "categories"
+  add_foreign_key "orders", "user_addresses"
+  add_foreign_key "orders", "users"
   add_foreign_key "price_rules", "categories"
   add_foreign_key "price_rules", "cities"
   add_foreign_key "prices", "products"
   add_foreign_key "products", "categories"
   add_foreign_key "user_addresses", "users"
+  add_foreign_key "user_cards", "users"
+  add_foreign_key "vouchers", "orders"
 end

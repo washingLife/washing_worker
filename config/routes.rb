@@ -3,6 +3,10 @@ Rails.application.routes.draw do
   devise_for :workers
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 
+  devise_scope :worker do 
+    root to: 'devise/sessions#new'
+  end
+
   resources :workers do 
     member do 
       get :reset_password
@@ -40,7 +44,21 @@ Rails.application.routes.draw do
   end
 
   resources :users do 
+    resources :user_cards do 
+      member do 
+        get :charge
+        post :charge
+      end
+    end
+    resources :coupons
   end
+
+  resources :coupons
+  resources :coupon_lists do 
+    resources :order_promotions, only: [:new, :create, :edit, :update, :destroy]
+  end  
+
+  resources :user_card_charge_settings
 
   post '/categories/:id', :to => 'categories#recovery'
   post '/categories/:category_id/products/:id', :to => 'products#recovery'
@@ -48,5 +66,4 @@ Rails.application.routes.draw do
   mount ActionCable.server => '/cable'
 
   root to: 'stations#index'
-  root to: 'workers#signin'
 end
